@@ -17,14 +17,15 @@ namespace flare
 		static SkMatrix convert(const flare::Mat2D& m)
 		{
 			SkMatrix skMatrix;
-			skMatrix.set9((SkScalar[9])
-			              // Skia Matrix is row major
-			              {// Row 1
-			               m[0], m[2], m[4],
-			               // Row 2
-			               m[1], m[3], m[5],
-			               // Row 3
-			               0.0, 0.0, 1.0});
+			SkScalar buffer[9] =
+					{// Row 1
+					m[0], m[2], m[4],
+					// Row 2
+					m[1], m[3], m[5],
+					// Row 3
+					0.0, 0.0, 1.0};
+
+			skMatrix.set9(buffer);
 			return skMatrix;
 		}
 

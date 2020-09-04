@@ -1,6 +1,7 @@
 #include "flare/actor_ik_constraint.hpp"
 #include "flare/actor.hpp"
 #include <cmath>
+#include <algorithm>
 
 using namespace flare;
 

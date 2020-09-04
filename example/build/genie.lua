@@ -34,16 +34,16 @@ project "example"
 		objdir "./release/bin/obj"
 
 	configuration "macosx"
-		links { "Cocoa.framework", "IOKit.framework", "CoreVideo.framework" }
-		includedirs { "/usr/local/include" }
-		libdirs { "/usr/local/lib" }
+		includedirs { "/usr/local/include", "/usr/include/" }
+		libdirs { "/usr/local/lib", "/usr/lib/x86_64-linux-gnu" }
 
 	configuration { }
 	
 	libdirs 
 	{ 
 		"../../dependencies/glfw_build/src",
-		"../../dependencies/skia/out/Static"
+		"../../dependencies/skia/out/Static",
+                "/usr/lib/x86_64-linux-gnu"
 	}
 
 	includedirs 
@@ -60,7 +60,7 @@ project "example"
 	}
 
 	links 
-	{ 	
+	{
 		"flare_skia",
 		"flare", 
 		"flare_math",
@@ -70,13 +70,19 @@ project "example"
 		"zlib",
 		"sksg",
 		"skshaper",
-		"freetype2"
+		"freetype2",
+		"jpeg",
+		"webp",
+		"webpdemux",
+		"webpmux",
+		"pthread",
+		"dl",
+		"GL"
 	}
 
 	buildoptions_cpp 
 	{
-		"-std=c++11",
-		"-fembed-bitcode"
+		"-std=c++17",
 	}
    
 	files

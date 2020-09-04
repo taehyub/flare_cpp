@@ -1,5 +1,6 @@
 #include "flare/path/actor_base_path.hpp"
 #include "flare/actor_shape.hpp"
+#include <limits>
 
 using namespace flare;
 

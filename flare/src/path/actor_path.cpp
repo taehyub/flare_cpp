@@ -4,6 +4,7 @@
 #include "flare/actor_skin.hpp"
 #include "flare/block_reader.hpp"
 #include "flare/path/path_point.hpp"
+#include <memory.h>
 
 using namespace flare;
 

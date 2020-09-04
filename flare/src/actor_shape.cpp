@@ -1,6 +1,7 @@
 #include "flare/actor_shape.hpp"
 #include "flare/paint/actor_fill.hpp"
 #include "flare/paint/actor_stroke.hpp"
+#include <algorithm>
 
 using namespace flare;
 

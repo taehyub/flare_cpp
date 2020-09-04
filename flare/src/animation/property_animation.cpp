@@ -158,6 +158,12 @@ void PropertyAnimation::read(BlockReader* reader, ActorComponent* component)
 			case PropertyType::StrokeStart:
 				frame = new KeyFrameStrokeStart();
 				break;
+                        case PropertyType::StrokeEnd:
+                                frame = new KeyFrameStrokeEnd();
+                                break;
+                        case PropertyType::StrokeOffset:
+                                frame = new KeyFrameStrokeOffset();
+                                break;
 			default:
 				// This will only happen if the code isn't handling a property type it should handle.
 				// Check the PropertyType enum and make sure Max is in the right place (and that you're not missing a

@@ -26,8 +26,7 @@ project "flare_skia"
 
 	buildoptions_cpp 
 	{
-		"-std=c++11",
-		"-fembed-bitcode"
+		"-std=c++17"
 	}
    
 	files

@@ -3,6 +3,8 @@
 #include "flare/actor_jelly_bone.hpp"
 #include "flare/actor_node.hpp"
 #include "flare/block_reader.hpp"
+#include <algorithm>
+#include <cassert>
 
 using namespace flare;
 

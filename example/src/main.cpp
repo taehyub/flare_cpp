@@ -1,3 +1,5 @@
+#define SK_GL
+
 #include "GLFW/glfw3.h"
 #include "GrBackendSurface.h"
 #include "GrContext.h"
@@ -176,14 +178,14 @@ int main()
 			lastScreenHeight = height;
 
 			SkColorType colorType;
-			if (kRGBA_8888_GrPixelConfig == kSkia8888_GrPixelConfig)
-			{
+//			if (kRGBA_8888_GrPixelConfig == kSkia8888_GrPixelConfig)
+//			{
 				colorType = kRGBA_8888_SkColorType;
-			}
-			else
-			{
-				colorType = kBGRA_8888_SkColorType;
-			}
+//			}
+//			else
+//			{
+///				colorType = kBGRA_8888_SkColorType;
+//			}
 
 			GrBackendRenderTarget backendRenderTarget(width, height,
 			                                          0, // sample count

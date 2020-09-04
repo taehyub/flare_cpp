@@ -1,6 +1,7 @@
 #include "flare_skia/skr_stroke.hpp"
 #include "flare/paint/actor_stroke.hpp"
 #include "flare_skia/to_skia.hpp"
+#include <cassert>
 
 using namespace flare;
 

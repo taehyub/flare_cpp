@@ -1,4 +1,5 @@
 #include "flare_skia/skr_fill.hpp"
+#include <cassert>
 
 using namespace flare;
 
@@ -18,10 +19,10 @@ void SkrFill::paint(SkCanvas* canvas, SkPath& path)
 	switch (m_ActorFill->fillRule())
 	{
 		case FillRule::EvenOdd:
-			path.setFillType(SkPath::FillType::kEvenOdd_FillType);
+			path.setFillType(SkPathFillType::kEvenOdd);
 			break;
 		case FillRule::NonZero:
-			path.setFillType(SkPath::FillType::kWinding_FillType);
+			path.setFillType(SkPathFillType::kEvenOdd);
 			break;
 	}
 	canvas->drawPath(path, m_Paint);

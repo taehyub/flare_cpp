@@ -19,8 +19,7 @@ project "flare_math"
 
 	buildoptions_cpp 
 	{
-		"-std=c++11",
-		"-fembed-bitcode"
+		"-std=c++17"
 	}
    
 	files

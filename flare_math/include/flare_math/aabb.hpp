@@ -12,10 +12,6 @@ namespace flare
 	private:
 		union {
 			float m_Buffer[4];
-			struct
-			{
-				Vec2D m_Min, m_Max;
-			};
 		};
 
 	public:
