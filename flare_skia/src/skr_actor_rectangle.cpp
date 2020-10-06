@@ -5,3 +5,7 @@ using namespace flare;
 SkrActorRectangle::SkrActorRectangle() : SkrActorBasePath(this) {}
 
 void SkrActorRectangle::invalidateDrawable() { m_IsPathValid = false; }
+
+TvgActorRectangle::TvgActorRectangle() : TvgActorBasePath(this) {}
+
+void TvgActorRectangle::invalidateDrawable() { m_IsPathValid = false; }

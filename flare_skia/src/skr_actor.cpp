@@ -50,3 +50,13 @@ ActorStar* SkrActor::makeStar() { return new SkrActorStar(); }
 ActorEllipse* SkrActor::makeEllipse() { return new SkrActorEllipse(); }
 
 ActorDrawableProxy* SkrActor::makeDrawableProxy(ActorDrawable* drawable) { return new SkrDrawableProxy(drawable); }
+
+//Flare - ThorVg
+ActorArtboard* TvgActor::makeArtboard() { return new TvgActorArtboard(this); }
+ActorShape* TvgActor::makeShape() { return new TvgActorShape(); }
+ActorColorFill* TvgActor::makeColorFill() { return new TvgColorFill(); }
+ActorColorStroke* TvgActor::makeColorStroke() { return new TvgColorStroke(); }
+ActorPath* TvgActor::makePath() { return new TvgActorPath(); }
+ActorRectangle* TvgActor::makeRectangle() { return new TvgActorRectangle(); }
+ActorEllipse* TvgActor::makeEllipse() { return new TvgActorEllipse(); }
+ActorDrawableProxy* TvgActor::makeDrawableProxy(ActorDrawable* drawable) { return new TvgDrawableProxy(drawable); }

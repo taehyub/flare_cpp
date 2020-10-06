@@ -28,5 +28,29 @@ namespace flare
 		ActorEllipse* makeEllipse() override;
 		ActorDrawableProxy* makeDrawableProxy(ActorDrawable* drawable) override;
 	};
+
+	class TvgActor : public Actor
+	{
+		typedef Actor Base;
+
+	public:
+		ActorArtboard* makeArtboard() override;
+//		ActorImage* makeImageNode() override;
+//		ActorStaticMesh* makeStaticMeshNode() override;
+		ActorShape* makeShape() override;
+		ActorColorFill* makeColorFill() override;
+		ActorColorStroke* makeColorStroke() override;
+//		ActorGradientFill* makeGradientFill() override;
+//		ActorGradientStroke* makeGradientStroke() override;
+//		ActorRadialGradientFill* makeRadialGradientFill() override;
+//		ActorRadialGradientStroke* makeRadialGradientStroke() override;
+		ActorPath* makePath() override;
+		ActorRectangle* makeRectangle() override;
+//		ActorTriangle* makeTriangle() override;
+//		ActorPolygon* makePolygon() override;
+//		ActorStar* makeStar() override;
+		ActorEllipse* makeEllipse() override;
+		ActorDrawableProxy* makeDrawableProxy(ActorDrawable* drawable) override;
+	};
 } // namespace flare
 #endif

@@ -22,3 +22,24 @@ void SkrActorArtboard::draw(SkCanvas* canvas)
 		reinterpret_cast<SkrDrawableProxy*>(m_Drawables[i])->skrDrawable()->draw(canvas);
 	}
 }
+
+TvgActorArtboard::TvgActorArtboard(TvgActor* actor) : ActorArtboard(actor) {}
+
+void TvgActorArtboard::initializeGraphics()
+{
+	for (int i = 0; i < m_DrawableCount; i++)
+	{
+		m_Drawables[i]->drawable()->initializeGraphics();
+	}
+}
+
+void TvgActorArtboard::draw(tvg::Canvas *canvas)
+{
+	for (int i = 0; i < m_DrawableCount; i++)
+	{
+		reinterpret_cast<TvgDrawableProxy*>(m_Drawables[i])->skrDrawable()->draw(canvas);
+	}
+}
+
+
+

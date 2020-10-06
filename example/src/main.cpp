@@ -1,6 +1,12 @@
 #define SK_GL
 
-#include "GLFW/glfw3.h"
+const char* fileName = "assets/Ball.flr";//O
+const char* animationName = "Bounds";
+//const char* fileName = "assets/Filip.flr";
+//const char* animationName = "idle";
+// const char* fileName = "assets/Teddy.flr";
+// const char* animationName = "test";
+
 #include "GrBackendSurface.h"
 #include "GrContext.h"
 #include "SkCanvas.h"
@@ -19,11 +25,11 @@
 #include <cmath>
 #include <stdio.h>
 
+//#define FLARE_SKIA
+//Flare - Skia
+#ifdef FLARE_SKIA
 
-const char* fileName = "assets/Filip.flr";
-const char* animationName = "idle";
-// const char* fileName = "assets/Teddy.flr";
-// const char* animationName = "test";
+#include "GLFW/glfw3.h"
 
 bool isRightMouseDown = false;
 double mouseX = 0.0, mouseY = 0.0;
@@ -294,3 +300,210 @@ int main()
 
 	return 0;
 }
+
+//Flare - Thorvg
+#else
+
+#include "flare/paint/actor_color_fill.hpp"
+#include "flare_skia/skr_color_fill.hpp"
+#include <iostream>
+#include <thread>
+#include <Evas_GL.h>
+#include <Elementary.h>
+#include <thorvg.h>
+
+#define WIDTH 1024
+#define HEIGHT 768
+
+Eo *gView;
+flare::TvgActorArtboard* artboard;
+flare::ActorAnimation* animation;
+
+using namespace std;
+
+void tvgDrawCmds(tvg::Canvas* canvas)
+{
+    if (!canvas) return;
+
+}
+
+double animationTime = 0.0;
+double elapsed = 0.0;
+double lastTime = 0.0;
+double currentTime = 0.0;
+
+Eina_Bool animGlCb(void* data)
+{
+    tvg::Canvas *canvas = (tvg::Canvas*)data;
+
+    currentTime = ecore_time_get();
+    double elapsed = currentTime - lastTime;
+    lastTime = currentTime;
+    animationTime += elapsed;
+    animation->apply(std::fmod(animationTime, animation->duration()), artboard, 1.0);
+    artboard->advance(elapsed);
+    artboard->draw(canvas);
+
+    auto img = (Eo*) gView;
+    evas_object_image_pixels_dirty_set(img, EINA_TRUE);
+    evas_object_image_data_update_add(img, 0, 0, WIDTH, HEIGHT);
+
+    return ECORE_CALLBACK_RENEW;
+}
+
+
+static unique_ptr<tvg::SwCanvas> swCanvas;
+
+void tvgSwTest(uint32_t* buffer)
+{
+    //Create a Canvas
+    swCanvas = tvg::SwCanvas::gen();
+    swCanvas->target(buffer, WIDTH, WIDTH, HEIGHT, tvg::SwCanvas::ARGB8888);
+
+    tvg::Canvas *canvas = swCanvas.get();
+
+    tvgDrawCmds(canvas);
+
+    flare::TvgActor* actor = new flare::TvgActor();
+    actor->load(fileName);
+    artboard = actor->artboard<flare::TvgActorArtboard>();
+    artboard->initializeGraphics();
+    animation = artboard->animation(animationName);
+
+    lastTime = ecore_time_get();
+    ecore_animator_frametime_set(1. / 60);
+    ecore_animator_add(animGlCb, canvas);
+}
+
+void drawSwView(void* data, Eo* obj)
+{
+    if (swCanvas->draw() == tvg::Result::Success) {
+        swCanvas->sync();
+    }
+}
+
+
+static unique_ptr<tvg::GlCanvas> glCanvas;
+
+void initGLview(Evas_Object *obj)
+{
+    static constexpr auto BPP = 4;
+
+    //Create a Canvas
+    glCanvas = tvg::GlCanvas::gen();
+    glCanvas->target(nullptr, WIDTH * BPP, WIDTH, HEIGHT);
+
+    tvgDrawCmds(glCanvas.get());
+}
+
+void drawGLview(Evas_Object *obj)
+{
+    auto gl = elm_glview_gl_api_get(obj);
+    gl->glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    gl->glClear(GL_COLOR_BUFFER_BIT);
+
+    if (glCanvas->draw() == tvg::Result::Success) {
+        glCanvas->sync();
+    }
+}
+
+void tvgSwTest(uint32_t* buffer);
+void drawSwView(void* data, Eo* obj);
+
+void win_del(void *data, Evas_Object *o, void *ev)
+{
+   elm_exit();
+}
+
+static Eo* createSwView()
+{
+    static uint32_t buffer[WIDTH * HEIGHT];
+
+    Eo* win = elm_win_util_standard_add(NULL, "ThorVG Test");
+    evas_object_smart_callback_add(win, "delete,request", win_del, 0);
+
+    Eo* view = evas_object_image_filled_add(evas_object_evas_get(win));
+    evas_object_image_size_set(view, WIDTH, HEIGHT);
+    evas_object_image_data_set(view, buffer);
+    evas_object_image_pixels_get_callback_set(view, drawSwView, nullptr);
+    evas_object_image_pixels_dirty_set(view, EINA_TRUE);
+    evas_object_image_data_update_add(view, 0, 0, WIDTH, HEIGHT);
+    evas_object_size_hint_weight_set(view, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+    evas_object_show(view);
+
+    elm_win_resize_object_add(win, view);
+    evas_object_geometry_set(win, 0, 0, WIDTH, HEIGHT);
+    evas_object_show(win);
+
+    tvgSwTest(buffer);
+
+    return view;
+}
+
+void initGLview(Evas_Object *obj);
+void drawGLview(Evas_Object *obj);
+
+static Eo* createGlView()
+{
+    elm_config_accel_preference_set("gl");
+
+    Eo* win = elm_win_util_standard_add(NULL, "ThorVG Test");
+    evas_object_smart_callback_add(win, "delete,request", win_del, 0);
+
+    Eo* view = elm_glview_add(win);
+    evas_object_size_hint_weight_set(view, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
+    elm_glview_mode_set(view, ELM_GLVIEW_ALPHA);
+    elm_glview_resize_policy_set(view, ELM_GLVIEW_RESIZE_POLICY_RECREATE);
+    elm_glview_render_policy_set(view, ELM_GLVIEW_RENDER_POLICY_ON_DEMAND);
+    elm_glview_init_func_set(view, initGLview);
+    elm_glview_render_func_set(view, drawGLview);
+    evas_object_show(view);
+
+    elm_win_resize_object_add(win, view);
+    evas_object_geometry_set(win, 0, 0, WIDTH, HEIGHT);
+    evas_object_show(win);
+
+    return view;
+}
+
+int main(int argc, char **argv)
+{
+    tvg::CanvasEngine tvgEngine = tvg::CanvasEngine::Sw;
+
+    if (argc > 1) {
+        if (!strcmp(argv[1], "gl")) tvgEngine = tvg::CanvasEngine::Gl;
+    }
+
+    //Initialize ThorVG Engine
+    if (tvgEngine == tvg::CanvasEngine::Sw) {
+        cout << "tvg engine: software" << endl;
+    } else {
+        cout << "tvg engine: opengl" << endl;
+    }
+
+    //Threads Count
+    auto threads = std::thread::hardware_concurrency();
+
+    //Initialize ThorVG Engine
+    if (tvg::Initializer::init(tvgEngine, threads) == tvg::Result::Success) {
+
+        elm_init(argc, argv);
+
+        if (tvgEngine == tvg::CanvasEngine::Sw) {
+            gView = createSwView();
+        } else {
+            createGlView();
+        }
+
+        elm_run();
+        elm_shutdown();
+
+        //Terminate ThorVG Engine
+        tvg::Initializer::term(tvgEngine);
+
+    } else {
+        cout << "engine is not supported" << endl;
+    }
+    return 0;
+}
+#endif

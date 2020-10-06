@@ -5,6 +5,8 @@
 #include "SkPaint.h"
 #include "SkPath.h"
 #include "flare/paint/actor_fill.hpp"
+#include "flare_math/color.hpp"
+#include <thorvg.h>
 
 namespace flare
 {
@@ -19,6 +21,20 @@ namespace flare
 		virtual void onPaintUpdated() {}
 		void updatePaint();
 		void paint(SkCanvas* canvas, SkPath& path);
+	};
+
+	class TvgFill
+	{
+	protected:
+		SkPaint m_Paint;
+		ActorFill* m_ActorFill;
+
+	public:
+                flare::Color m_color;
+		void initializeGraphics();
+		virtual void onPaintUpdated() {}
+		void updatePaint();
+		void paint(tvg::Canvas *canvas, tvg::Shape *path);
 	};
 } // namespace flare
 #endif

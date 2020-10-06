@@ -16,6 +16,16 @@ namespace flare
 
 		void invalidateDrawable() override;
 	};
+
+	class TvgActorRectangle : public ActorRectangle, public TvgActorBasePath
+	{
+		typedef ActorRectangle Base;
+
+	public:
+		TvgActorRectangle();
+
+		void invalidateDrawable() override;
+	};
 } // namespace flare
 
 #endif

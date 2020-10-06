@@ -8,3 +8,8 @@ SkrDrawableProxy::SkrDrawableProxy(ActorDrawable* drawable) : Base(drawable), m_
 {
 
 }
+
+TvgDrawableProxy::TvgDrawableProxy(ActorDrawable* drawable) : Base(drawable), m_TvgDrawable(dynamic_cast<TvgDrawable*>(drawable))
+{
+
+}

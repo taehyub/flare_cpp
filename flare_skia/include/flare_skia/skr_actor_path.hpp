@@ -16,6 +16,16 @@ namespace flare
 
 		void invalidateDrawable() override;
 	};
+
+	class TvgActorPath : public ActorPath, public TvgActorBasePath
+	{
+		typedef ActorPath Base;
+
+	public:
+		TvgActorPath();
+
+		void invalidateDrawable() override;
+	};
 } // namespace flare
 
 #endif

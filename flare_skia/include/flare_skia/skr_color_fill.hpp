@@ -15,6 +15,14 @@ namespace flare
 		void updatePaint() override;
 	};
 
+	class TvgColorFill : public ActorColorFill, public TvgFill
+	{
+		typedef ActorColorFill Base;
+
+	public:
+		void initializeGraphics() override { TvgFill::initializeGraphics(); }
+		void updatePaint() override;
+	};
 } // namespace flare
 
 #endif

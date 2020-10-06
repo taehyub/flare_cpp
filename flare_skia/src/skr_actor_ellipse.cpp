@@ -5,3 +5,7 @@ using namespace flare;
 SkrActorEllipse::SkrActorEllipse() : SkrActorBasePath(this) {}
 
 void SkrActorEllipse::invalidateDrawable() { m_IsPathValid = false; }
+
+TvgActorEllipse::TvgActorEllipse() : TvgActorBasePath(this) {}
+
+void TvgActorEllipse::invalidateDrawable() { m_IsPathValid = false; }

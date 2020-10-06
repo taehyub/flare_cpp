@@ -33,21 +33,41 @@ project "example"
 		targetdir "./release/bin"
 		objdir "./release/bin/obj"
 
-	configuration "macosx"
-		includedirs { "/usr/local/include", "/usr/include/" }
-		libdirs { "/usr/local/lib", "/usr/lib/x86_64-linux-gnu" }
-
 	configuration { }
 	
 	libdirs 
 	{ 
 		"../../dependencies/glfw_build/src",
 		"../../dependencies/skia/out/Static",
-                "/usr/lib/x86_64-linux-gnu"
+                "/usr/local/lib/x86_64-linux-gnu"
 	}
 
 	includedirs 
 	{
+                "/usr/local/include/elementary-1",
+                "/usr/local/include/efl-1",
+                "/usr/local/include/eina-1",
+                "/usr/local/include/eina-1/eina",
+                "/usr/local/include/eet-1",
+                "/usr/local/include/emile-1",
+                "/usr/local/include/evas-1",
+                "/usr/local/include/eo-1",
+                "/usr/local/include/ecore-1",
+                "/usr/local/include/ecore-evas-1",
+                "/usr/local/include/ecore-file-1",
+                "/usr/local/include/ecore-input-1",
+                "/usr/local/include/ecore-imf-1",
+                "/usr/local/include/ecore-con-1",
+                "/usr/local/include/edje-1",
+                "/usr/local/include/eldbus-1",
+                "/usr/local/include/efreet-1",
+                "/usr/local/include/ethumb-client-1",
+                "/usr/local/include/ethumb-1",
+                "/usr/local/include/edje-1",
+                "/usr/local/include/eldbus-1",
+                "/usr/local/include/efreet-1",
+                "/usr/local/include/ethumb-client-1",
+                "/usr/local/include/ethumb-1",
 		"../../dependencies/glfw/include",
 		"../../dependencies/skia",
 		"../../dependencies/skia/include/core",
@@ -77,7 +97,11 @@ project "example"
 		"webpmux",
 		"pthread",
 		"dl",
-		"GL"
+		"GL",
+		"ecore",
+		"evas",
+		"elementary",
+		"thorvg"
 	}
 
 	buildoptions_cpp 

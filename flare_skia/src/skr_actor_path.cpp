@@ -9,3 +9,11 @@ void SkrActorPath::invalidateDrawable()
 	Base::invalidateDrawable();
 	m_IsPathValid = false;
 }
+
+TvgActorPath::TvgActorPath() : TvgActorBasePath(this) {}
+
+void TvgActorPath::invalidateDrawable()
+{
+	Base::invalidateDrawable();
+	m_IsPathValid = false;
+}

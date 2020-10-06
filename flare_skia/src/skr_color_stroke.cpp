@@ -11,6 +11,20 @@ void SkrColorStroke::updatePaint()
     SkColor4f color{m_Color[0], m_Color[1], m_Color[2], m_Color[3] * m_RenderOpacity};
     m_Paint.setColor4f(color, nullptr);
 
+    onPaintUpdated();
+}
+
+void TvgColorStroke::updatePaint()
+{
+    m_Paint.setBlendMode(ToSkia::convert(m_Shape->blendMode()));
+    TvgStroke::updatePaint();
+    SkColor4f color{m_Color[0], m_Color[1], m_Color[2], m_Color[3] * m_RenderOpacity};
+    m_Paint.setColor4f(color, nullptr);
+
+    this->m_color[0] = m_Color[0];
+    this->m_color[1] = m_Color[1];
+    this->m_color[2] = m_Color[2];
+    this->m_color[3] = m_Color[3];
 
     onPaintUpdated();
 }
