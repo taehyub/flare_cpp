@@ -138,8 +138,7 @@ void SkrActorShape::onFillsChanged()
 
 // Flare - Thorvg
 TvgActorShape::TvgActorShape() : m_IsValid(false), m_Fill(nullptr), m_Stroke(nullptr) {
-    this->tvgPath = tvg::Shape::gen().release();
-    this->pushed = false;
+	this->pushed = false;
 }
 
 void TvgActorShape::onBlendModeChanged(BlendMode from, BlendMode to)
@@ -190,8 +189,14 @@ void TvgActorShape::path(tvg::Canvas *canvas)
     if (!m_IsValid)
 	{
 		m_IsValid = true;
+		int i=0;
 		for (auto path : m_SubPaths)
-			path->path(canvas, tvgPath);
+		{
+			Mat2D pathTransform = path->basePath()->pathTransform();
+			this->m_Paths.push_back(tvg::Shape::gen().release());
+			path->path(canvas, m_Paths[i]);
+			canvas->push(std::unique_ptr<tvg::Shape>(m_Paths[i++]));
+		}
 	}
 }
 
@@ -208,12 +213,19 @@ void TvgActorShape::draw(tvg::Canvas *canvas)
 	}
 
 	Mat2D pathTransform;
+	int i = 0;
 	for (auto path : m_SubPaths)
 	{
 		pathTransform = path->basePath()->pathTransform();
-		tvgPath->translate(pathTransform[4], pathTransform[5]);
+		tvg::Matrix m = {1, 0, 0, 0, 1, 0, 0, 0, 1};
+		m.e11 = pathTransform[0];
+		m.e12 = pathTransform[2];
+		m.e13 = pathTransform[4];
+		m.e21 = pathTransform[1];
+		m.e22 = pathTransform[3];
+		m.e23 = pathTransform[5];
+		m_Paths[i++]->transform(m);
 	}
-
 
 	//FIXME: Clip is not supported yet
 	/*
@@ -236,21 +248,16 @@ void TvgActorShape::draw(tvg::Canvas *canvas)
 	}
 	*/
 
-	if (m_Fill != nullptr)
+	i = 0;
+	for (auto path : m_SubPaths)
 	{
-		m_Fill->paint(canvas, tvgPath);
-	}
+		if (m_Fill != nullptr)
+			m_Fill->paint(canvas, m_Paths[i]);
 
-	if (m_Stroke != nullptr)
-	{
-		m_Stroke->paint(canvas, tvgPath);
-	}
+		if (m_Stroke != nullptr)
+			m_Stroke->paint(canvas, m_Paths[i]);
 
-	if (!this->pushed)
-		canvas->push(std::unique_ptr<tvg::Shape>(tvgPath));
-	else
-	{
-		canvas->update(tvgPath);
+		canvas->update(m_Paths[i++]);
 	}
 
 	this->pushed = true;

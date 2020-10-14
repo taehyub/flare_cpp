@@ -293,6 +293,8 @@ void TvgActorBasePath::updatePath(tvg::Canvas *canvas, tvg::Shape *tvgPath)
 			}
 		}
 
+		tvgPath->close();
+
 		if (isClosed)
 		{
 

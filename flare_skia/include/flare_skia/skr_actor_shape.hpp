@@ -56,10 +56,9 @@ namespace flare
 
 	private:
 		// Flare - Thorvg
-		tvg::Shape *tvgPath;
+		std::vector<tvg::Shape*> m_Paths;
 		bool m_IsValid;
                 bool pushed;
-		SkPath m_Path;
 		std::vector<TvgActorBasePath*> m_SubPaths;
 
 		// We currently only support rendering a single fill/stroke so we only
