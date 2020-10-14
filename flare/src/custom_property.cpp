@@ -30,6 +30,10 @@ CustomIntProperty* CustomIntProperty::read(ActorArtboard* artboard, BlockReader*
 
 void CustomIntProperty::resolveComponentIndices(ActorComponent** components, int numComponents)
 {
+	//FIXME:: CustomProperty is not supported yet, please remove this later.
+	return;
+	//
+
 	Base::resolveComponentIndices(components, numComponents);
 
 	ActorComponent* parent = components[parentIdx()];
