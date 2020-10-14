@@ -86,7 +86,7 @@ void SkrActorBasePath::updatePath()
 							{
 								Vec2D translation, inPoint;
 								Vec2D::scaleAndAdd(translation, pos, toNext, renderRadius);
-								Vec2D::scaleAndAdd(translation, pos, toNext, iarcConstant * renderRadius);
+								Vec2D::scaleAndAdd(inPoint, pos, toNext, iarcConstant * renderRadius);
 
 								CubicPathPoint* newPoint = new CubicPathPoint(translation, inPoint, translation);
 								cleanup.push_back(newPoint);
@@ -235,7 +235,7 @@ void TvgActorBasePath::updatePath(tvg::Canvas *canvas, tvg::Shape *tvgPath)
 							{
 								Vec2D translation, inPoint;
 								Vec2D::scaleAndAdd(translation, pos, toNext, renderRadius);
-								Vec2D::scaleAndAdd(translation, pos, toNext, iarcConstant * renderRadius);
+								Vec2D::scaleAndAdd(inPoint, pos, toNext, iarcConstant * renderRadius);
 
 								CubicPathPoint* newPoint = new CubicPathPoint(translation, inPoint, translation);
 								cleanup.push_back(newPoint);
