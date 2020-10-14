@@ -68,5 +68,5 @@ void TvgStroke::paint(tvg::Canvas *canvas, tvg::Shape *path)
 	a = this->m_color[3] * 255;
 
 	path->stroke(r, g, b, a);
-	path->stroke(1);
+	path->stroke(m_ActorStroke->width());
 }
