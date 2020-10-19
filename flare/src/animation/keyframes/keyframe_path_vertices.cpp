@@ -67,7 +67,7 @@ void KeyFramePathVertices::apply(ActorComponent* component, float mix)
 		}
 	}
 
-	path->invalidateDrawable();
+	path->markVertexDeformDirty();
 }
 
 void KeyFramePathVertices::applyInterpolation(ActorComponent* component, float time, KeyFrame* toFrame, float mix)
@@ -101,5 +101,5 @@ void KeyFramePathVertices::applyInterpolation(ActorComponent* component, float t
 		}
 	}
 
-	path->invalidateDrawable();
+	path->markVertexDeformDirty();
 }

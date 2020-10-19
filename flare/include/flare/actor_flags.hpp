@@ -6,8 +6,12 @@ namespace flare
 	enum class ActorFlags : unsigned short
 	{
 		IsDrawOrderDirty = 1 << 0,
-		IsInstance = 1 << 1,
-		IsDirty = 1 << 2
+		IsDirty = 1 << 1,
+		//FIXME::plase remove this for flutter sync, In flutter Isinstance is deprecated,
+		//but I leave IsInstance enum value here for the legacy codes.
+		//IsInstance is changed to 1<<2 to avoid ABI break.
+		IsInstance = 1 << 2,
+		//
 	};
 
 	inline constexpr ActorFlags operator&(ActorFlags x, ActorFlags y)

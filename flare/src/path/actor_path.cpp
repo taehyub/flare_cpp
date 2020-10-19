@@ -10,6 +10,8 @@ using namespace flare;
 
 Mat2D identity;
 
+static unsigned char vertexDeformDirty = 1 << 1;
+
 ActorPath::ActorPath() : Base(ComponentType::ActorPath), m_VertexDeform(nullptr) {}
 ActorPath::~ActorPath()
 {
@@ -146,13 +148,13 @@ void ActorPath::markVertexDeformDirty()
 	{
 		return;
 	}
-	m_Artboard->addDirt(this, DirtyFlags::VertexDeformDirty, false);
+	m_Artboard->addDirt(this, (DirtyFlags)vertexDeformDirty, false);
 	m_DeformedPoints.reserve(m_Points.size());
 }
 
 void ActorPath::update(DirtyFlags dirt)
 {
-	if (m_VertexDeform != nullptr && (dirt & DirtyFlags::VertexDeformDirty) == DirtyFlags::VertexDeformDirty)
+	if (m_VertexDeform != nullptr && ((unsigned char)dirt & vertexDeformDirty) == vertexDeformDirty)
 	{
 		int idx = 0;
 		for (auto point : m_Points)

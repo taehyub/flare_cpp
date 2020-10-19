@@ -184,7 +184,7 @@ void TvgActorShape::onChildrenChanged()
 
 void TvgActorShape::invalidateDrawable() { m_IsValid = false; }
 
-void TvgActorShape::path(tvg::Canvas *canvas)
+void TvgActorShape::path(tvg::Canvas *canvas, bool pushed)
 {
     if (!m_IsValid)
 	{
@@ -193,9 +193,16 @@ void TvgActorShape::path(tvg::Canvas *canvas)
 		for (auto path : m_SubPaths)
 		{
 			Mat2D pathTransform = path->basePath()->pathTransform();
-			this->m_Paths.push_back(tvg::Shape::gen().release());
-			path->path(canvas, m_Paths[i]);
-			canvas->push(std::unique_ptr<tvg::Shape>(m_Paths[i++]));
+			if (!pushed)
+			{
+				this->m_Paths.push_back(tvg::Shape::gen().release());
+				path->path(canvas, m_Paths[i]);
+				canvas->push(std::unique_ptr<tvg::Shape>(m_Paths[i++]));
+			}
+			else
+			{
+				path->path(canvas, m_Paths[i++]);
+			}
 		}
 	}
 }
@@ -207,10 +214,7 @@ void TvgActorShape::draw(tvg::Canvas *canvas)
 		return;
 	}
 
-	if (!this->pushed)
-	{
-		path(canvas);
-	}
+	path(canvas, this->pushed);
 
 	Mat2D pathTransform;
 	int i = 0;

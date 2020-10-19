@@ -21,7 +21,6 @@ void SkrActorBasePath::updatePath()
 	m_Path.rewind();
 
 	const std::vector<PathPoint*>& pts = m_BasePath->deformedPoints();
-
 	if (pts.size() != 0)
 	{
 		std::vector<PathPoint*> renderPoints;
@@ -160,6 +159,7 @@ void TvgActorBasePath::path(tvg::Canvas *canvas, tvg::Shape *tvgPath)
 {
 	if (!m_IsPathValid)
 	{
+		tvgPath->reset();
 		updatePath(canvas, tvgPath);
 		m_IsPathValid = true;
 	}
@@ -293,11 +293,9 @@ void TvgActorBasePath::updatePath(tvg::Canvas *canvas, tvg::Shape *tvgPath)
 			}
 		}
 
-		tvgPath->close();
-
 		if (isClosed)
 		{
-
+			tvgPath->close();
 		}
 		for (PathPoint* point : cleanup)
 		{

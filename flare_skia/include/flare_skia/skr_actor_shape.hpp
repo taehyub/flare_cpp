@@ -76,7 +76,7 @@ namespace flare
 		void invalidateDrawable() override;
 
 		void draw(tvg::Canvas *canvas) override;
-		void path(tvg::Canvas *canvas);
+		void path(tvg::Canvas *canvas, bool pushed = false);
 
 	protected:
 		void onStrokesChanged() override;
