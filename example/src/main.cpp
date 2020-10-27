@@ -1,7 +1,9 @@
 #define SK_GL
 
-const char* fileName = "assets/Ball.flr";//O
-const char* animationName = "Bounds";
+const char* fileName = "assets/PathAnimation.flr";
+const char* animationName = "go";
+//const char* fileName = "assets/Ball.flr";
+//const char* animationName = "Bounds";
 //const char* fileName = "assets/Filip.flr";
 //const char* animationName = "idle";
 // const char* fileName = "assets/Teddy.flr";
