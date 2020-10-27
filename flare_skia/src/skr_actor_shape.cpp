@@ -260,8 +260,7 @@ void TvgActorShape::draw(tvg::Canvas *canvas)
 
 		if (m_Stroke != nullptr)
 			m_Stroke->paint(canvas, m_Paths[i]);
-
-		canvas->update(m_Paths[i++]);
+		i++;
 	}
 
 	this->pushed = true;

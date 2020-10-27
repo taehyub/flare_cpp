@@ -7,6 +7,7 @@
 #include "flare/paint/actor_stroke.hpp"
 #include "flare_math/color.hpp"
 #include <thorvg.h>
+#include <vector>
 
 namespace flare
 {
@@ -28,9 +29,10 @@ namespace flare
 	{
 	protected:
 		SkPaint m_Paint;
-        SkPath* m_EffectPath;
-        ActorStroke* m_ActorStroke;
-
+		ActorStroke *m_ActorStroke;
+		tvg::Shape *m_OriginShape;
+		std::vector<tvg::PathCommand> m_TrimPathCmds;
+		std::vector<tvg::Point> m_TrimPathPoints;
 	public:
                 flare::Color m_color;
 		void initializeGraphics();

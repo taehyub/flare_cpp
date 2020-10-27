@@ -60,4 +60,5 @@ void TvgFill::paint(tvg::Canvas *canvas, tvg::Shape *path)
 	b = this->m_color[2] * 255;
 	a = this->m_color[3] * 255;
 	path->fill(r, g, b, a);
+	canvas->update(path);
 }
