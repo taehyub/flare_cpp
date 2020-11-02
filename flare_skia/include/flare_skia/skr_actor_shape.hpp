@@ -60,6 +60,7 @@ namespace flare
 		bool m_IsValid;
                 bool pushed;
 		std::vector<TvgActorBasePath*> m_SubPaths;
+		std::vector<tvg::Shape *> clipPaths;
 
 		// We currently only support rendering a single fill/stroke so we only
 		// store these two concrete pointers.

@@ -7,6 +7,7 @@
 #include "flare_skia/skr_stroke.hpp"
 #include "flare_skia/skr_fill.hpp"
 #include <thorvg.h>
+#include <vector>
 
 using namespace flare;
 
@@ -231,30 +232,35 @@ void TvgActorShape::draw(tvg::Canvas *canvas)
 		m_Paths[i++]->transform(m);
 	}
 
-	//FIXME: Clip is not supported yet
-	/*
 	auto clips = clippingShapes();
+	this->clipPaths.clear();
+
 	for(auto& clipLayer : clips)
 	{
 		if (clipLayer.size() == 1)
 		{
-			canvas->clipPath(clipLayer[0]->path(), true);
+			clipLayer[0]->path(canvas, clipLayer[0]->pushed);
+			this->clipPaths.push_back(clipLayer[0]->m_Paths[0]);
 		}
 		else
 		{
-			SkPath complexClip;
 			for(auto& clipShape : clipLayer)
 			{
-				complexClip.addPath(clipShape->path());
+				clipShape->path(canvas, clipShape->pushed);
+				this->clipPaths.push_back(clipShape->m_Paths[0]);
 			}
-			canvas->clipPath(complexClip, true);
 		}
 	}
-	*/
 
 	i = 0;
 	for (auto path : m_SubPaths)
 	{
+		for (int j = 0; j < this->clipPaths.size(); j++)
+		{
+			auto copy = std::unique_ptr<tvg::Shape>(static_cast<tvg::Shape*>(this->clipPaths[j]->duplicate()));
+		        m_Paths[i]->composite(std::move(copy), tvg::CompositeMethod::ClipPath);
+		}
+
 		if (m_Fill != nullptr)
 			m_Fill->paint(canvas, m_Paths[i]);
 
