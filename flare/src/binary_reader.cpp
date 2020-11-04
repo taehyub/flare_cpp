@@ -229,3 +229,15 @@ unsigned long BinaryReader::readUint64()
 	}
 	return *reinterpret_cast<unsigned long*>(bytes);
 }
+
+unsigned int BinaryReader::readUint8Array(unsigned char* numbers, unsigned int length)
+{
+	unsigned int readCount = 0;
+	for (int i = 0; i < length && m_DataPosition < m_DataLength; i++)
+	{
+		numbers[i] = m_Data[m_DataPosition];
+		m_DataPosition++;
+		readCount++;
+	}
+	return readCount;
+}

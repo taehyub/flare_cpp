@@ -23,6 +23,7 @@ namespace flare
 	public:
 		BinaryReader(unsigned char* data, unsigned int length, Endian endianness = LittleEndian);
 
+		unsigned int readUint8Array(unsigned char *numbers, unsigned int length);
 		unsigned char readUint8();
 		unsigned int read(unsigned char* bytes, unsigned int length);
 		void readFloat32Array(float* numbers, unsigned int length);

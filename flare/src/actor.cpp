@@ -88,11 +88,32 @@ void Actor::load(unsigned char* bytes, unsigned int length)
 				break;
 			case BlockType::Atlases:
 				// TODO: Load atlases
+				readAtlasesBlock(block);
 				break;
 			default:
 				break;
 		}
 		block->close();
+	}
+}
+
+void Actor::readAtlasesBlock(BlockReader* block)
+{
+	//FIXME::Image Data Should be saved as a member variable in Flutter Actor
+	bool isOOB = (unsigned char)block->readUint8();
+	int numAtlases = (unsigned int)block->readUint16();
+	for (int i=0; i<numAtlases; i++) {
+		unsigned int length = (unsigned int)block->readUint32();
+		unsigned char *imageData = new unsigned char[length];
+		unsigned int result = block->readUint8Array(imageData, length);
+
+		/*
+		//Save Raw Image File
+		FILE *fp;
+		fp = fopen("image.raw", "w+");
+		fwrite(imageData, sizeof(unsigned char), length, fp);
+		fclose(fp);
+		*/
 	}
 }
 

@@ -171,6 +171,13 @@ ActorImage* ActorImage::read(ActorArtboard* artboard, BlockReader* reader, Actor
 		node->m_Vertices = new float[vertexLength];
 		reader->readFloat32Array(node->m_Vertices, vertexLength);
 
+                int isDynamic = reader->readUint8();
+                if (isDynamic) {
+			//FIXME::m_DynamicUV should be implemented in the node later.
+	                //node->m_DynamicUV = new float[numVertices * 2];
+	                //reader->readFloat32Array(node->m_DynamicUV, numVertices * 2);
+                }
+
 		unsigned int numTris = reader->readUint32();
 		node->m_TriangleCount = (int)numTris;
 

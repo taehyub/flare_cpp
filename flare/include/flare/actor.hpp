@@ -45,7 +45,7 @@ namespace flare
 	private:
   
 		void readArtboardsBlock(BlockReader* block);
-		
+		void readAtlasesBlock(BlockReader* block);
 
 	protected:
 		int m_MaxTextureIndex;
