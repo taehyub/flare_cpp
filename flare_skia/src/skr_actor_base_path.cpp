@@ -139,6 +139,7 @@ void SkrActorBasePath::updatePath()
 				Vec2D& fcin = *cin;
 				Vec2D& fcout = *cout;
 				Vec2D& translation = nextPoint->translation();
+
 				m_Path.cubicTo(fcout[0], fcout[1], fcin[0], fcin[1], translation[0], translation[1]);
 			}
 		}
@@ -155,20 +156,42 @@ void SkrActorBasePath::updatePath()
 }
 
 //Flare - ThorVg
-void TvgActorBasePath::path(tvg::Canvas *canvas, tvg::Shape *tvgPath)
+Vec2D applyTransform(Vec2D &vec, Mat2D &mat)
 {
-	if (!m_IsPathValid)
-	{
-		tvgPath->reset();
-		updatePath(canvas, tvgPath);
+	tvg::Matrix m = {1, 0, 0, 0, 1, 0, 0, 0, 1};
+	m.e11 = mat[0];
+	m.e12 = mat[2];
+	m.e13 = mat[4];
+	m.e21 = mat[1];
+	m.e22 = mat[3];
+	m.e23 = mat[5];
+
+	Vec2D ret;
+	ret[0] = round(vec[0] * m.e11 + vec[1] * m.e12 + m.e13);
+	ret[1] = round(vec[0] * m.e21 + vec[1] * m.e22 + m.e23);
+
+	return ret;
+}
+
+void TvgActorBasePath::path(tvg::Shape *tvgPath)
+{
+//FIXME: The following line is commented to apply transform for each shapes,
+//       because the transform is cacluated in this function.
+//       With the following line, the transform will not be calculated.
+//       So I commented the following line ,but the line should be restore later
+//	 for performance.
+//	if (!m_IsPathValid)
+//	{
+		updatePath(tvgPath);
 		m_IsPathValid = true;
-	}
+//	}
 }
 
 TvgActorBasePath::TvgActorBasePath(ActorBasePath* path) : m_BasePath(path), m_IsPathValid(false) {}
 
-void TvgActorBasePath::updatePath(tvg::Canvas *canvas, tvg::Shape *tvgPath)
+void TvgActorBasePath::updatePath(tvg::Shape *tvgPath)
 {
+	Mat2D pathTransform = this->basePath()->pathTransform();
 	const std::vector<PathPoint*>& pts = m_BasePath->deformedPoints();
 
 	if (pts.size() != 0)
@@ -261,7 +284,10 @@ void TvgActorBasePath::updatePath(tvg::Canvas *canvas, tvg::Shape *tvgPath)
 
 		PathPoint* firstPoint = renderPoints[0];
 		Vec2D& translation = firstPoint->translation();
-		tvgPath->moveTo(translation[0], translation[1]);
+
+		Vec2D transformed_t = applyTransform(translation, pathTransform);
+
+		tvgPath->moveTo(transformed_t[0], transformed_t[1]);
 		for (int i = 0, l = isClosed ? renderPoints.size() : renderPoints.size() - 1, pl = renderPoints.size(); i < l;
 		     i++)
 		{
@@ -273,7 +299,8 @@ void TvgActorBasePath::updatePath(tvg::Canvas *canvas, tvg::Shape *tvgPath)
 			if (cin == nullptr && cout == nullptr)
 			{
 				Vec2D& translation = nextPoint->translation();
-				tvgPath->lineTo(translation[0], translation[1]);
+				Vec2D transformed_t = applyTransform(translation, pathTransform);
+				tvgPath->lineTo(transformed_t[0], transformed_t[1]);
 			}
 			else
 			{
@@ -289,7 +316,11 @@ void TvgActorBasePath::updatePath(tvg::Canvas *canvas, tvg::Shape *tvgPath)
 				Vec2D& fcin = *cin;
 				Vec2D& fcout = *cout;
 				Vec2D& translation = nextPoint->translation();
-				tvgPath->cubicTo(fcout[0], fcout[1], fcin[0], fcin[1], translation[0], translation[1]);
+
+				Vec2D transformed_cin = applyTransform(fcin, pathTransform);
+				Vec2D transformed_cout = applyTransform(fcout, pathTransform);
+				Vec2D transformed_t = applyTransform(translation, pathTransform);
+				tvgPath->cubicTo(transformed_cout[0], transformed_cout[1], transformed_cin[0], transformed_cin[1], transformed_t[0], transformed_t[1]);
 			}
 		}
 

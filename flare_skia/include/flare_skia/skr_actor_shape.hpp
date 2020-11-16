@@ -56,7 +56,7 @@ namespace flare
 
 	private:
 		// Flare - Thorvg
-		std::vector<tvg::Shape*> m_Paths;
+		tvg::Shape *m_Path;
 		bool m_IsValid;
                 bool pushed;
 		std::vector<TvgActorBasePath*> m_SubPaths;

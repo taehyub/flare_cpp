@@ -37,13 +37,13 @@ namespace flare
 		bool m_IsPathValid;
 
 	private:
-		void updatePath(tvg::Canvas *canvas, tvg::Shape *tvgPath);
+		void updatePath(tvg::Shape *tvgPath);
 
 	protected:
 		TvgActorBasePath(ActorBasePath* path);
 
 	public:
-		void path(tvg::Canvas *canvas, tvg::Shape *tvgPath);
+		void path(tvg::Shape *tvgPath);
 		ActorBasePath* basePath() const { return m_BasePath; }
 	};
 

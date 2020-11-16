@@ -42,15 +42,12 @@ void TvgFill::paint(tvg::Canvas *canvas, tvg::Shape *path)
 {
 	m_ActorFill->validatePaint();
 
-	//FIXME: Tvg Filltype is not supported yet
 	switch (m_ActorFill->fillRule())
 	{
 		case FillRule::EvenOdd:
-
-	//		path.setFillType(SkPathFillType::kEvenOdd);
+			path->fill(tvg::FillRule::EvenOdd);
 			break;
 		case FillRule::NonZero:
-	//		path.setFillType(SkPathFillType::kEvenOdd);
 			break;
 	}
 

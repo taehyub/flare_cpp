@@ -140,6 +140,7 @@ void SkrActorShape::onFillsChanged()
 // Flare - Thorvg
 TvgActorShape::TvgActorShape() : m_IsValid(false), m_Fill(nullptr), m_Stroke(nullptr) {
 	this->pushed = false;
+	this->m_Path = tvg::Shape::gen().release();
 }
 
 void TvgActorShape::onBlendModeChanged(BlendMode from, BlendMode to)
@@ -190,21 +191,12 @@ void TvgActorShape::path(tvg::Canvas *canvas, bool pushed)
     if (!m_IsValid)
 	{
 		m_IsValid = true;
-		int i=0;
+		m_Path->reset();
 		for (auto path : m_SubPaths)
-		{
-			Mat2D pathTransform = path->basePath()->pathTransform();
-			if (!pushed)
-			{
-				this->m_Paths.push_back(tvg::Shape::gen().release());
-				path->path(canvas, m_Paths[i]);
-				canvas->push(std::unique_ptr<tvg::Shape>(m_Paths[i++]));
-			}
-			else
-			{
-				path->path(canvas, m_Paths[i++]);
-			}
-		}
+			path->path(m_Path);
+
+		if (!pushed)
+			canvas->push(std::unique_ptr<tvg::Shape>(m_Path));
 	}
 }
 
@@ -217,20 +209,11 @@ void TvgActorShape::draw(tvg::Canvas *canvas)
 
 	path(canvas, this->pushed);
 
-	Mat2D pathTransform;
-	int i = 0;
-	for (auto path : m_SubPaths)
-	{
-		pathTransform = path->basePath()->pathTransform();
-		tvg::Matrix m = {1, 0, 0, 0, 1, 0, 0, 0, 1};
-		m.e11 = pathTransform[0];
-		m.e12 = pathTransform[2];
-		m.e13 = pathTransform[4];
-		m.e21 = pathTransform[1];
-		m.e22 = pathTransform[3];
-		m.e23 = pathTransform[5];
-		m_Paths[i++]->transform(m);
-	}
+	//FIXME: This transform code is preventing clip source object is disappeared.
+	//       Without this transform code, clip source object will be disappeared.
+	//       To fix this behavior, ThorVG should be modified and verified for this.
+	tvg::Matrix m = {1, 0, 0, 0, 1, 0, 0, 0, 1};
+	m_Path->transform(m);
 
 	auto clips = clippingShapes();
 	this->clipPaths.clear();
@@ -239,34 +222,27 @@ void TvgActorShape::draw(tvg::Canvas *canvas)
 	{
 		if (clipLayer.size() == 1)
 		{
-			clipLayer[0]->path(canvas, clipLayer[0]->pushed);
-			this->clipPaths.push_back(clipLayer[0]->m_Paths[0]);
+			this->clipPaths.push_back(clipLayer[0]->m_Path);
 		}
 		else
 		{
 			for(auto& clipShape : clipLayer)
 			{
 				clipShape->path(canvas, clipShape->pushed);
-				this->clipPaths.push_back(clipShape->m_Paths[0]);
+				this->clipPaths.push_back(clipShape->m_Path);
 			}
 		}
 	}
 
-	i = 0;
-	for (auto path : m_SubPaths)
+	if (m_Fill != nullptr)
+		m_Fill->paint(canvas, m_Path);
+	if (m_Stroke != nullptr)
+		m_Stroke->paint(canvas, m_Path);
+
+	if (this->clipPaths.size() != 0)
 	{
-		for (int j = 0; j < this->clipPaths.size(); j++)
-		{
-			auto copy = std::unique_ptr<tvg::Shape>(static_cast<tvg::Shape*>(this->clipPaths[j]->duplicate()));
-		        m_Paths[i]->composite(std::move(copy), tvg::CompositeMethod::ClipPath);
-		}
-
-		if (m_Fill != nullptr)
-			m_Fill->paint(canvas, m_Paths[i]);
-
-		if (m_Stroke != nullptr)
-			m_Stroke->paint(canvas, m_Paths[i]);
-		i++;
+		auto copy = std::unique_ptr<tvg::Shape>(static_cast<tvg::Shape*>(this->clipPaths[0]->duplicate()));
+	        m_Path->composite(std::move(copy), tvg::CompositeMethod::ClipPath);
 	}
 
 	this->pushed = true;

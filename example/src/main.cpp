@@ -1,7 +1,11 @@
 #define SK_GL
 
-const char* fileName = "assets/PathAnimation.flr";
-const char* animationName = "go";
+//const char* fileName = "assets/clippath.flr";
+//const char* animationName = "Untitled";
+const char* fileName = "assets/Mi.flr";
+const char* animationName = "Wave";
+//const char* fileName = "assets/evenodd.flr";
+//const char* animationName = "Untitled";
 //const char* fileName = "assets/Ball.flr";
 //const char* animationName = "Bounds";
 //const char* fileName = "assets/Filip.flr";
