@@ -5,7 +5,7 @@
 using namespace flare;
 
 ActorProceduralPath::ActorProceduralPath(ComponentType type) : Base(type) {}
-ActorProceduralPath::~ActorProceduralPath() { invalidateDrawable(); }
+ActorProceduralPath::~ActorProceduralPath() { /* KTH This is commented because of delete actor issue */ /* invalidateDrawable();*/ }
 void ActorProceduralPath::width(float value)
 {
 	if (m_Width == value)

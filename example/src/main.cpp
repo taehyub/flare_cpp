@@ -2,12 +2,15 @@
 
 //const char* fileName = "assets/clippath.flr";
 //const char* animationName = "Untitled";
-const char* fileName = "assets/Mi.flr";
-const char* animationName = "Wave";
+//const char* fileName = "assets/Mi.flr";
+//const char* animationName = "Wave";
+//const char* animationName2 = "Jump";
+//const char* fileName = "assets/actionmenu.flr";
+//const char* animationName = "activate";
 //const char* fileName = "assets/evenodd.flr";
 //const char* animationName = "Untitled";
-//const char* fileName = "assets/Ball.flr";
-//const char* animationName = "Bounds";
+const char* fileName = "assets/effect2.flr";
+const char* animationName = "Alarm";
 //const char* fileName = "assets/Filip.flr";
 //const char* animationName = "idle";
 // const char* fileName = "assets/Teddy.flr";
@@ -324,22 +327,33 @@ int main()
 Eo *gView;
 flare::TvgActorArtboard* artboard;
 flare::ActorAnimation* animation;
+flare::ActorAnimation* animation2;
+flare::TvgActor* actor;
+Ecore_Animator *animator;
+Eo *menu;
+
+int animationCnt = 0;
+
+static uint32_t buffer[WIDTH * HEIGHT];
 
 using namespace std;
 
 void tvgDrawCmds(tvg::Canvas* canvas)
 {
     if (!canvas) return;
-
 }
 
 double animationTime = 0.0;
 double elapsed = 0.0;
 double lastTime = 0.0;
 double currentTime = 0.0;
+bool gAnim = true;
+int gViewX = 0;
+int gViewY = 0;
 
 Eina_Bool animGlCb(void* data)
 {
+    if (!gAnim) return ECORE_CALLBACK_CANCEL;
     tvg::Canvas *canvas = (tvg::Canvas*)data;
 
     currentTime = ecore_time_get();
@@ -347,8 +361,17 @@ Eina_Bool animGlCb(void* data)
     lastTime = currentTime;
     animationTime += elapsed;
     animation->apply(std::fmod(animationTime, animation->duration()), artboard, 1.0);
+    if (animation2)
+      animation2->apply(std::fmod(animationTime, animation2->duration()), artboard, 1.0);
     artboard->advance(elapsed);
     artboard->draw(canvas);
+
+    printf("KTH animation time:%lf duration:%lf\n", animationTime, animation->duration());
+
+    if (animationTime > animation->duration()) {
+      animator = NULL;
+      return ECORE_CALLBACK_CANCEL;
+    }
 
     auto img = (Eo*) gView;
     evas_object_image_pixels_dirty_set(img, EINA_TRUE);
@@ -357,11 +380,11 @@ Eina_Bool animGlCb(void* data)
     return ECORE_CALLBACK_RENEW;
 }
 
-
 static unique_ptr<tvg::SwCanvas> swCanvas;
 
-void tvgSwTest(uint32_t* buffer)
+void tvgSwTest(uint32_t* buffer, const char* fileName, const char* animationName, const char* animationName2)
 {
+    gAnim = true;
     //Create a Canvas
     swCanvas = tvg::SwCanvas::gen();
     swCanvas->target(buffer, WIDTH, WIDTH, HEIGHT, tvg::SwCanvas::ARGB8888);
@@ -370,20 +393,22 @@ void tvgSwTest(uint32_t* buffer)
 
     tvgDrawCmds(canvas);
 
-    flare::TvgActor* actor = new flare::TvgActor();
+    actor = new flare::TvgActor();
     actor->load(fileName);
     artboard = actor->artboard<flare::TvgActorArtboard>();
     artboard->initializeGraphics();
     animation = artboard->animation(animationName);
+    if (animationName2)
+      animation2 = artboard->animation(animationName2);
 
     lastTime = ecore_time_get();
     ecore_animator_frametime_set(1. / 60);
-    ecore_animator_add(animGlCb, canvas);
+    animator = ecore_animator_add(animGlCb, canvas);
 }
 
 void drawSwView(void* data, Eo* obj)
 {
-    if (swCanvas->draw() == tvg::Result::Success) {
+    if (swCanvas && swCanvas->draw() == tvg::Result::Success) {
         swCanvas->sync();
     }
 }
@@ -413,7 +438,7 @@ void drawGLview(Evas_Object *obj)
     }
 }
 
-void tvgSwTest(uint32_t* buffer);
+void tvgSwTest(uint32_t* buffer, const char* fileName, const char* animationName, const char* animationName2);
 void drawSwView(void* data, Eo* obj);
 
 void win_del(void *data, Evas_Object *o, void *ev)
@@ -421,10 +446,74 @@ void win_del(void *data, Evas_Object *o, void *ev)
    elm_exit();
 }
 
+static void
+_menu1_clicked(void *data, Evas_Object *obj EINA_UNUSED, void *event_info EINA_UNUSED)
+{
+    gAnim = false;
+    if (animator) ecore_animator_del(animator);
+    delete actor;
+    animation2 = NULL;
+    animationTime = 0.0;
+    evas_object_move(gView, 0, 0);
+    if (!strcmp((char *)data, "DanceJump"))
+      tvgSwTest(buffer, "assets/Mi.flr", "Dance", "Jump");
+    else if (!strcmp((char *)data, "WaveJump"))
+      tvgSwTest(buffer, "assets/Mi.flr", "Wave", "Jump");
+    else
+      tvgSwTest(buffer, "assets/Mi.flr", (char *)data, NULL);
+    evas_object_show(menu);
+}
+
+static void
+_menu2_clicked(void *data, Evas_Object *obj EINA_UNUSED, void *event_info EINA_UNUSED)
+{
+    if (animator) ecore_animator_del(animator);
+    delete actor;
+    animation2 = NULL;
+    animationTime = 0.0;
+    evas_object_move(gView, 350, 200);
+    tvgSwTest(buffer, "assets/ActionMenu.flr", (char*)data, NULL);
+    evas_object_show(menu);
+}
+
+static void
+_menu3_clicked(void *data, Evas_Object *obj EINA_UNUSED, void *event_info EINA_UNUSED)
+{
+    if (animator) ecore_animator_del(animator);
+    delete actor;
+    animation2 = NULL;
+    animationTime = 0.0;
+    evas_object_move(gView, 350, 200);
+    tvgSwTest(buffer, "assets/loading2.flr", (char*)data, NULL);
+    evas_object_show(menu);
+}
+
+static void
+_menu4_clicked(void *data, Evas_Object *obj EINA_UNUSED, void *event_info EINA_UNUSED)
+{
+    if (animator) ecore_animator_del(animator);
+    delete actor;
+    animation2 = NULL;
+    animationTime = 0.0;
+    evas_object_move(gView, 350, 200);
+    tvgSwTest(buffer, "assets/effect2.flr", (char*)data, NULL);
+    evas_object_show(menu);
+}
+
+static void
+_menu5_clicked(void *data, Evas_Object *obj EINA_UNUSED, void *event_info EINA_UNUSED)
+{
+    if (animator) ecore_animator_del(animator);
+    delete actor;
+    animation2 = NULL;
+    animationTime = 0.0;
+    evas_object_move(gView, 200, 150);
+    tvgSwTest(buffer, "assets/PushButton.flr", (char*)data, NULL);
+    evas_object_show(menu);
+}
+
 static Eo* createSwView()
 {
-    static uint32_t buffer[WIDTH * HEIGHT];
-
     Eo* win = elm_win_util_standard_add(NULL, "ThorVG Test");
     evas_object_smart_callback_add(win, "delete,request", win_del, 0);
 
@@ -437,11 +526,43 @@ static Eo* createSwView()
     evas_object_size_hint_weight_set(view, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
     evas_object_show(view);
 
-    elm_win_resize_object_add(win, view);
+    Eo *bg = evas_object_rectangle_add(evas_object_evas_get(win));
+    evas_object_color_set(bg, 0, 0, 0, 255);
+    evas_object_show(bg);
+    elm_win_resize_object_add(win, bg);
+
     evas_object_geometry_set(win, 0, 0, WIDTH, HEIGHT);
+    evas_object_move(view, gViewX, gViewY);
+    evas_object_resize(view, WIDTH, HEIGHT);
     evas_object_show(win);
 
-    tvgSwTest(buffer);
+    menu = elm_menu_add(win);
+    Eo* menu_it = elm_menu_item_add(menu, NULL, NULL, "Minions", NULL, NULL);
+    elm_menu_item_add(menu, menu_it, "Wave", "Stand", _menu1_clicked, "Stand");
+    elm_menu_item_add(menu, menu_it, "Wave", "Wave", _menu1_clicked, "Wave");
+    elm_menu_item_add(menu, menu_it, "Wave", "Dance", _menu1_clicked, "Dance");
+    elm_menu_item_add(menu, menu_it, "Wave", "Jump", _menu1_clicked, "Jump");
+    elm_menu_item_add(menu, menu_it, "Wave", "Dance + Jump", _menu1_clicked, "DanceJump");
+    elm_menu_item_add(menu, menu_it, "Wave", "Wave + Jump", _menu1_clicked, "WaveJump");
+
+    menu_it = elm_menu_item_add(menu, NULL, NULL, "Action Menu", NULL, NULL);
+    elm_menu_item_add(menu, menu_it, "Wave", "Activate", _menu2_clicked, "activate");
+    elm_menu_item_add(menu, menu_it, "Wave", "DeActivate",_menu2_clicked, "deactivate");
+
+    menu_it = elm_menu_item_add(menu, NULL, NULL, "Loading", NULL, NULL);
+    elm_menu_item_add(menu, menu_it, "Wave", "Loaing", _menu3_clicked, "loading");
+
+    menu_it = elm_menu_item_add(menu, NULL, NULL, "Effect", NULL, NULL);
+    elm_menu_item_add(menu, menu_it, "Wave", "Alarm", _menu4_clicked, "Alarm");
+
+    menu_it = elm_menu_item_add(menu, NULL, NULL, "Push Button", NULL, NULL);
+    elm_menu_item_add(menu, menu_it, "Wave", "cancel", _menu5_clicked, "cancel");
+    elm_menu_item_add(menu, menu_it, "Wave", "star", _menu5_clicked, "star");
+
+    evas_object_move(menu, 10, 10);
+    evas_object_show(menu);
+
+    //tvgSwTest(buffer, fileName, animationName);
 
     return view;
 }

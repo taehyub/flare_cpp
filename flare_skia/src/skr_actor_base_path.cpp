@@ -288,6 +288,7 @@ void TvgActorBasePath::updatePath(tvg::Shape *tvgPath)
 		Vec2D transformed_t = applyTransform(translation, pathTransform);
 
 		tvgPath->moveTo(transformed_t[0], transformed_t[1]);
+                printf("KTH x:%f y:%f\n", transformed_t[0], transformed_t[1]);
 		for (int i = 0, l = isClosed ? renderPoints.size() : renderPoints.size() - 1, pl = renderPoints.size(); i < l;
 		     i++)
 		{
