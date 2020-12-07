@@ -1,0 +1,23 @@
+install_headers([
+	 'thorvg_actor.hpp',
+	 'thorvg_actor_artboard.hpp',
+	 'thorvg_actor_base_path.hpp',
+	 'thorvg_actor_ellipse.hpp',
+	 'thorvg_actor_path.hpp',
+	 'thorvg_actor_polygon.hpp',
+	 'thorvg_actor_rectangle.hpp',
+	 'thorvg_actor_shape.hpp',
+	 'thorvg_actor_star.hpp',
+	 'thorvg_actor_triangle.hpp',
+	 'thorvg_color_fill.hpp',
+	 'thorvg_color_stroke.hpp',
+	 'thorvg_drawable.hpp',
+	 'thorvg_drawable_proxy.hpp',
+	 'thorvg_fill.hpp',
+	 'thorvg_gradient_fill.hpp',
+	 'thorvg_gradient_stroke.hpp',
+	 'thorvg_radial_gradient_fill.hpp',
+	 'thorvg_radial_gradient_stroke.hpp',
+	 'thorvg_stroke.hpp',
+        ], subdir : 'flare_thorvg')
+

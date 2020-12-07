@@ -1,0 +1,49 @@
+subdir('animation')
+subdir('paint')
+subdir('path')
+subdir('exceptions')
+
+install_headers([
+	'actor.hpp',
+	'actor_artboard.hpp',
+	'actor_axis_constraint.hpp',
+	'actor_bone.hpp',
+	'actor_bone_base.hpp',
+	'actor_collider.hpp',
+	'actor_component.hpp',
+	'actor_constraint.hpp',
+	'actor_distance_constraint.hpp',
+	'actor_drawable.hpp',
+	'actor_drawable_proxy.hpp',
+	'actor_event.hpp',
+	'actor_flags.hpp',
+	'actor_ik_constraint.hpp',
+	'actor_image.hpp',
+	'actor_instance.hpp',
+	'actor_jelly_bone.hpp',
+	'actor_node.hpp',
+	'actor_node_solo.hpp',
+	'actor_root_bone.hpp',
+	'actor_rotation_constraint.hpp',
+	'actor_scale_constraint.hpp',
+	'actor_shape.hpp',
+	'actor_skin.hpp',
+	'actor_skinnable.hpp',
+	'actor_static_mesh.hpp',
+	'actor_targeted_constraint.hpp',
+	'actor_transform_constraint.hpp',
+	'actor_translation_constraint.hpp',
+	'binary_reader.hpp',
+	'blend_mode.hpp',
+	'block_reader.hpp',
+	'block_types.hpp',
+	'custom_property.hpp',
+	'custom_reader.hpp',
+	'dependency_sorter.hpp',
+	'dirty_flags.hpp',
+	'jelly_component.hpp',
+	'nested_actor_asset.hpp',
+	'nested_actor_node.hpp',
+	'transform_space.hpp'
+        ], subdir : 'flare')
+
