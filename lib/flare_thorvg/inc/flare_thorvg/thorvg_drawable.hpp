@@ -1,6 +1,10 @@
 #ifndef _SKR_DRAWABLE_HPP_
 #define _SKR_DRAWABLE_HPP_
 
+#ifndef FLARE_EXPORT
+#define FLARE_EXPORT __attribute__((visibility("default")))
+#endif
+
 #include <vector>
 #include <stdint.h>
 #include <thorvg.h>
@@ -9,7 +13,7 @@ namespace flare
 {
 	class ActorNode;
 	class TvgActorShape;
-	class TvgDrawable
+	class FLARE_EXPORT TvgDrawable
 	{
 		std::vector<std::vector<TvgActorShape*>> m_ClippingShapes;
 

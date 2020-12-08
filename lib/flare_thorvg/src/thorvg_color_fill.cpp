@@ -3,6 +3,16 @@
 
 using namespace flare;
 
+void TvgColorFill::updateColor(float r, float g, float b, float a)
+{
+   m_Color[0] = r;
+   m_Color[1] = g;
+   m_Color[2] = b;
+   m_Color[3] = a;
+
+   updatePaint();
+}
+
 void TvgColorFill::updatePaint()
 {
     this->m_color[0] = m_Color[0];

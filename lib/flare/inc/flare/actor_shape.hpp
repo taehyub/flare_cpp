@@ -1,6 +1,10 @@
 #ifndef _FLARE_ACTORSHAPE_HPP_
 #define _FLARE_ACTORSHAPE_HPP_
 
+#ifndef FLARE_EXPORT
+#define FLARE_EXPORT __attribute__((visibility("default")))
+#endif
+
 #include "actor_drawable.hpp"
 #include <vector>
 
@@ -9,7 +13,7 @@ namespace flare
 	class ActorStroke;
 	class ActorFill;
 
-	class ActorShape : public ActorDrawable
+	class FLARE_EXPORT ActorShape : public ActorDrawable
 	{
 		typedef ActorDrawable Base;
 

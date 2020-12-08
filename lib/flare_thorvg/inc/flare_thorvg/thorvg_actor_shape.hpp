@@ -1,6 +1,10 @@
 #ifndef _SKR_ACTOR_SHAPE_HPP_
 #define _SKR_ACTOR_SHAPE_HPP_
 
+#ifndef FLARE_EXPORT
+#define FLARE_EXPORT __attribute__((visibility("default")))
+#endif
+
 #include "flare/actor_shape.hpp"
 #include "thorvg_drawable.hpp"
 #include <thorvg.h>
@@ -13,7 +17,7 @@ namespace flare
 	class TvgFill;
 	class TvgStroke;
 
-	class TvgActorShape : public ActorShape, public TvgDrawable
+	class FLARE_EXPORT TvgActorShape : public ActorShape, public TvgDrawable
 	{
 		typedef ActorShape Base;
 
@@ -41,6 +45,7 @@ namespace flare
 
 		void draw(tvg::Canvas *canvas) override;
 		void path(tvg::Canvas *canvas, bool pushed = false);
+		ActorFill* getFill();
 
 	protected:
 		void onStrokesChanged() override;

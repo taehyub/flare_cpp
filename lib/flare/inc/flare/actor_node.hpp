@@ -1,6 +1,10 @@
 #ifndef _FLARE_ACTORNODE_HPP_
 #define _FLARE_ACTORNODE_HPP_
 
+#ifndef FLARE_EXPORT
+#define FLARE_EXPORT __attribute__((visibility("default")))
+#endif
+
 #include "actor_component.hpp"
 #include "actor_constraint.hpp"
 #include "flare_math/mat2d.hpp"
@@ -21,7 +25,7 @@ namespace flare
 		ActorNodeClip(ActorNode* n) : node(n) {}
 	};
 
-	class ActorNode : public ActorComponent
+	class FLARE_EXPORT ActorNode : public ActorComponent
 	{
 		typedef ActorComponent Base;
 

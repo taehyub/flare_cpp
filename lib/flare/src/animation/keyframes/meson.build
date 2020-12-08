@@ -33,7 +33,7 @@ keyframe_src = [
 ]
 
 keyframe_dep = declare_dependency(
-#   include_directories : headers,
+   include_directories : headers,
    sources : keyframe_src
 )
 

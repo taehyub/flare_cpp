@@ -1,6 +1,10 @@
 #ifndef _FLARE_ACTORCOMPONENT_HPP_
 #define _FLARE_ACTORCOMPONENT_HPP_
 
+#ifndef FLARE_EXPORT
+#define FLARE_EXPORT __attribute__((visibility("default")))
+#endif
+
 #include "dirty_flags.hpp"
 #include "flare_math/mat2d.hpp"
 #include "flare_math/vec2d.hpp"
@@ -61,7 +65,7 @@ namespace flare
 		ActorSkin = 113
 	};
 
-	class ActorComponent
+	class FLARE_EXPORT ActorComponent
 	{
 	protected:
 		ComponentType m_Type;

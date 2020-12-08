@@ -3,7 +3,8 @@ asset_files = [
 	'Heart.flr',
 	'Mi.flr',
 	'PushButton.flr',
-	'effect.flr'
+	'effect.flr',
+	'Ball.flr'
 ]
 
 install_data(asset_files, install_dir : '/home/flare') 

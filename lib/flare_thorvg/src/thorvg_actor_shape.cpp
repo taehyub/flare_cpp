@@ -145,4 +145,10 @@ void TvgActorShape::onFillsChanged()
     }
 }
 
+ActorFill* TvgActorShape::getFill()
+{
+	if (m_Fills.size() == 0) return nullptr;
+	else return m_Fills[0];
+}
+
 

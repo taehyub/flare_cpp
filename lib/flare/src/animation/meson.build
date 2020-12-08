@@ -9,7 +9,7 @@ animation_src = [
 ]
 
 animation_dep = declare_dependency(
-#   include_directories : headers,
+   include_directories : headers,
    dependencies : [interpolation_dep, keyframe_dep],
    sources : animation_src
 )

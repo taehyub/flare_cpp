@@ -1,6 +1,10 @@
 #ifndef _FLARE_ACTORDRAWABLE_HPP_
 #define _FLARE_ACTORDRAWABLE_HPP_
 
+#ifndef FLARE_EXPORT
+#define FLARE_EXPORT __attribute__((visibility("default")))
+#endif
+
 #include "actor_node.hpp"
 #include "blend_mode.hpp"
 

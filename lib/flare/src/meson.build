@@ -43,7 +43,7 @@ source_file = [
 ]
 
 flare_dep = declare_dependency(
-#   include_directories : headers,
+   include_directories : headers,
    dependencies : [animation_dep, paint_dep, path_dep],
    sources : source_file
 )

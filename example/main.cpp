@@ -1,5 +1,9 @@
+#include "flare/actor_component.hpp"
+#include "flare/actor_node.hpp"
 #include "flare_thorvg/thorvg_actor_artboard.hpp"
 #include "flare_thorvg/thorvg_actor.hpp"
+#include "flare_thorvg/thorvg_actor_shape.hpp"
+#include "flare_thorvg/thorvg_color_fill.hpp"
 #include "flare/animation/actor_animation.hpp"
 #include "flare/exceptions/overflow_exception.hpp"
 #include "flare/exceptions/unsupported_version_exception.hpp"
@@ -167,6 +171,25 @@ _menu2_clicked(void *data, Evas_Object *obj EINA_UNUSED, void *event_info EINA_U
     assetPath = assetPath + "ActionMenu.flr";
 
     tvgSwTest(buffer, assetPath.c_str(), (char*)data, NULL);
+/*
+    flare::ActorNode* myNode = static_cast<flare::ActorNode*>(artboard->component("icons-container"));
+    if (!myNode) return;
+
+    flare::TvgActorShape* myShape = static_cast<flare::TvgActorShape*>(artboard->component("icons-container"));
+    flare::ActorFill *myFill = myShape->getFill();
+    flare::TvgColorFill *myColorFill  = dynamic_cast<flare::TvgColorFill*>(myFill);
+
+    static bool isFirstColor = true;
+
+    if (isFirstColor) {
+	myColorFill->updateColor(1.0, 0.0, 0.0, 1.0);
+	isFirstColor = false;
+    }
+    else {
+	myColorFill->updateColor(0.0, 1.0, 0.0, 1.0);
+	isFirstColor = true;
+    }
+*/
 }
 
 static void
@@ -179,7 +202,7 @@ _menu3_clicked(void *data, Evas_Object *obj EINA_UNUSED, void *event_info EINA_U
     evas_object_move(gView, -100, 100);
 
     std::string assetPath = AssetsPath;
-    assetPath = assetPath + "Heart.flr";
+    assetPath = assetPath + "Ball.flr";
 
     tvgSwTest(buffer, assetPath.c_str(), (char*)data, NULL);
 }
@@ -206,13 +229,49 @@ _menu5_clicked(void *data, Evas_Object *obj EINA_UNUSED, void *event_info EINA_U
     delete actor;
     animation2 = NULL;
     animationTime = 0.0;
+    evas_object_move(gView, -100, 100);
+
+    std::string assetPath = AssetsPath;
+    assetPath = assetPath + "Heart.flr";
+
+    tvgSwTest(buffer, assetPath.c_str(), (char*)data, NULL);
+}
+
+static void
+_menu6_clicked(void *data, Evas_Object *obj EINA_UNUSED, void *event_info EINA_UNUSED)
+{
+    if (animator) ecore_animator_del(animator);
+    delete actor;
+    animation2 = NULL;
+    animationTime = 0.0;
     evas_object_move(gView, 50, 350);
 
     std::string assetPath = AssetsPath;
     assetPath = assetPath + "PushButton.flr";
 
     tvgSwTest(buffer, assetPath.c_str(), (char*)data, NULL);
+
+    flare::ActorNode* myNode = static_cast<flare::ActorNode*>(artboard->component("Shape"));
+    if (!myNode) return;
+
+    flare::TvgActorShape* myShape = static_cast<flare::TvgActorShape*>(artboard->component("Shape"));
+    if (!myShape) return;
+
+    flare::ActorFill *myFill = myShape->getFill();
+    flare::TvgColorFill *myColorFill  = dynamic_cast<flare::TvgColorFill*>(myFill);
+
+    static bool isFirstColor = true;
+
+    if (isFirstColor) {
+	myColorFill->updateColor(1.0, 0.0, 0.0, 0.7);
+	isFirstColor = false;
+    }
+    else {
+	myColorFill->updateColor(0.0, 0.0, 1.0, 0.7);
+	isFirstColor = true;
+    }
 }
+
 
 static void
 move_ctxpopup(Evas_Object *ctxpopup, Evas_Object *btn)
@@ -233,7 +292,7 @@ btn_sample1_cb(void *data, Evas_Object *obj, void *event_info)
         elm_ctxpopup_item_append(ctxpopup, "Jump", NULL, _menu1_clicked, "Jump");            
                                                                                                       
         move_ctxpopup(ctxpopup, obj);                                                                 
-        evas_object_show(ctxpopup);                                                                   
+        evas_object_show(ctxpopup);
 }
 
 static void                                                                                           
@@ -248,16 +307,37 @@ btn_sample2_cb(void *data, Evas_Object *obj, void *event_info)
         evas_object_show(ctxpopup);                                                                   
 }
 
-static void                                                                                           
+static void
 btn_sample3_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	Eo *win = (Eo*)data;
         Eo *ctxpopup = elm_ctxpopup_add(win);                                                              
-        elm_ctxpopup_item_append(ctxpopup, "Like", NULL, _menu3_clicked, "Like");
-        elm_ctxpopup_item_append(ctxpopup, "Unlike", NULL, _menu3_clicked, "Unlike");
+        elm_ctxpopup_item_append(ctxpopup, "Bounds", NULL, _menu3_clicked, "Bounds");
  
         move_ctxpopup(ctxpopup, obj);                                                                 
-        evas_object_show(ctxpopup);                                                                   
+        evas_object_show(ctxpopup);
+}
+
+static void
+btn_sample3_color_cb(void *data, Evas_Object *obj, void *event_info)
+{
+    flare::ActorNode* myNode = static_cast<flare::ActorNode*>(artboard->component("Ball"));
+    if (!myNode) return;
+
+    flare::TvgActorShape* myShape = static_cast<flare::TvgActorShape*>(artboard->component("Ball"));
+    flare::ActorFill *myFill = myShape->getFill();
+    flare::TvgColorFill *myColorFill  = dynamic_cast<flare::TvgColorFill*>(myFill);
+
+    static bool isFirstColor = true;
+
+    if (isFirstColor) {
+	myColorFill->updateColor(1.0, 0.0, 0.0, 0.3);
+	isFirstColor = false;
+    }
+    else {
+	myColorFill->updateColor(0.0, 0.0, 1.0, 0.3);
+	isFirstColor = true;
+    }
 }
 
 static void                                                                                           
@@ -271,13 +351,25 @@ btn_sample4_cb(void *data, Evas_Object *obj, void *event_info)
         evas_object_show(ctxpopup);                                                                   
 }
 
-static void                                                                                           
+static void
 btn_sample5_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	Eo *win = (Eo*)data;
+        Eo *ctxpopup = elm_ctxpopup_add(win);
+        elm_ctxpopup_item_append(ctxpopup, "Like", NULL, _menu5_clicked, "Like");
+        elm_ctxpopup_item_append(ctxpopup, "Unlike", NULL, _menu5_clicked, "Unlike");
+
+        move_ctxpopup(ctxpopup, obj);
+        evas_object_show(ctxpopup);
+}
+
+static void
+btn_sample6_cb(void *data, Evas_Object *obj, void *event_info)
+{
+	Eo *win = (Eo*)data;
         Eo *ctxpopup = elm_ctxpopup_add(win);                                                              
-        elm_ctxpopup_item_append(ctxpopup, "Cancel", NULL, _menu5_clicked, "cancel");
-        elm_ctxpopup_item_append(ctxpopup, "Star", NULL, _menu5_clicked, "star");
+        elm_ctxpopup_item_append(ctxpopup, "Cancel", NULL, _menu6_clicked, "cancel");
+        elm_ctxpopup_item_append(ctxpopup, "Star", NULL, _menu6_clicked, "star");
  
         move_ctxpopup(ctxpopup, obj);                                                                 
         evas_object_show(ctxpopup);                                                                   
@@ -323,9 +415,16 @@ static Eo* createSwView()
 
     button = elm_button_add(win);
     evas_object_smart_callback_add(button, "clicked", btn_sample3_cb, win);
-    elm_object_text_set(button, "Like");
-    evas_object_resize(button, 200, 50);
+    elm_object_text_set(button, "Ball");
+    evas_object_resize(button, 150, 50);
     evas_object_move(button, 0, 100);
+    evas_object_show(button);
+
+    button = elm_button_add(win);
+    evas_object_smart_callback_add(button, "clicked", btn_sample3_color_cb, win);
+    elm_object_text_set(button, "CustomColor");
+    evas_object_resize(button, 150, 50);
+    evas_object_move(button, 150, 100);
     evas_object_show(button);
 
     button = elm_button_add(win);
@@ -337,9 +436,16 @@ static Eo* createSwView()
 
     button = elm_button_add(win);
     evas_object_smart_callback_add(button, "clicked", btn_sample5_cb, win);
+    elm_object_text_set(button, "Heart");
+    evas_object_resize(button, 200, 50);
+    evas_object_move(button, 0, 200);
+    evas_object_show(button);
+
+    button = elm_button_add(win);
+    evas_object_smart_callback_add(button, "clicked", btn_sample6_cb, win);
     elm_object_text_set(button, "Push Button");
     evas_object_resize(button, 300, 50);
-    evas_object_move(button, 0, 200);
+    evas_object_move(button, 0, 250);
     evas_object_show(button);
 
     return view;

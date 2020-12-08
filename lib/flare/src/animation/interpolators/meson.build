@@ -5,7 +5,7 @@ interpolation_src = [
 ]
 
 interpolation_dep = declare_dependency(
-#   include_directories : headers,
+   include_directories : headers,
    sources : interpolation_src
 )
 

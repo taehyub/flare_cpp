@@ -11,6 +11,6 @@ path_src = [
 ]
 
 path_dep = declare_dependency(
-#   include_directories : headers,
+   include_directories : headers,
    sources : path_src
 )

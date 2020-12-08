@@ -14,7 +14,7 @@ paint_src = [
 ]
 
 paint_dep = declare_dependency(
-#   include_directories : headers,
+   include_directories : headers,
    sources : paint_src
 )
 
